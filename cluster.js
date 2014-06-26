@@ -27,9 +27,28 @@ function reloadWorkers(workers) {
         newWorker.on("listening", function () {
             console.log("Replacement worker online.");
             if (workers.length > 0) {
-                reloadWorkers( workers);
+                reloadWorkers(workers);
             }
         });
+    });
+}
+
+
+/**
+ * stops every worker one at a time waiting before killing the next
+ *
+ * @param workers
+ */
+function shutdownWorkers(workers) {
+    var workerKey = workers.shift();
+    var newWorker = cluster.fork();
+
+    console.log('restarting worker: ' + workerKey);
+
+    stopWorker(workerKey, function () {
+        if (workers.length > 0) {
+            shutdownWorkers(workers);
+        }
     });
 }
 
