@@ -22,6 +22,7 @@ function stopWorker(workerKey, callback){
  * @param {Array} workers
  */
 function reloadWorkers(workers) {
+    console.log('*** reloading workers!');
     var workerKey = workers.shift();
     var newWorker = cluster.fork();
 
@@ -112,7 +113,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
  * lists the workers and inits the graceful shutdown procedure
  */
 function gracefulShutdown(){
-    console.log('shutting down gracefully');
+    console.log('*** shutting down gracefully');
     var workers = Object.keys(cluster.workers);
     shutdownWorkers(workers);
 }
