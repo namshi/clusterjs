@@ -2,11 +2,10 @@
 
 An handy tool for your node servers and 0 downtime needs.
 
-Cluster.js will take your app and spawn it in a node-cluster with how many workers you want.
+ClusterJS will take your app and spawn it in a node-cluster with as many workers you want.
 
-You can reload the cluster sending a signal: clusterjs will go through all your workers,
-reloading one of them and waiting until it's listen on the wire before restarting another
-until the whole cluster is done.
+You can reload the whole cluster sending a simple signal: ClusterJS will go
+through all your workers, reloading them one by one.
 
 ```
 ~/projects/clusterjs (master ✔) ᐅ clusterjs
@@ -18,7 +17,6 @@ Options:
  --workers	 Defines how many workers we should launch (Default: CPU count)
  --reloadon	 On Which signal will the cluster be reloaded (Default: SIGUSR2)
 ```
-
 
 ## Installation
 
@@ -38,7 +36,7 @@ clusterjs ./app
 ```
 
 This will start a cluster of as many apps as CPU cores you
-have on your machine: to change the number of workers, simply
+have on your machine; to change the number of workers, simply
 specify it when launching the cluster:
 
 ```
@@ -46,7 +44,7 @@ clusterjs ./app --workers 5
 ```
 
 You can reload the cluster, achieving **zero-downtime deployments** by
-issuing a `SIGUSR` command to the master process:
+issuing a `SIGUSR2` command to the master process:
 
 ```
 ~/projects/clusterjs (master ✔) ᐅ ps aux | grep cluster.js
@@ -57,10 +55,10 @@ issuing a `SIGUSR` command to the master process:
 29577  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
 29582  0.0  0.0  13636   984 pts/5    S+   23:21   0:00 grep cluster.js
 
-~/projects/clusterjs (first-release ✔) ᐅ kill -SIGUSR2 29571
+~/projects/clusterjs (master ✔) ᐅ kill -SIGUSR2 29571
 ```
 
-This will gracefully reload your cluster, causing your app to be updated
+This will gracefully reload your cluster, updating the app
 without any downtime.
 
 You can also customize the signal used to reload the cluster:
@@ -72,7 +70,7 @@ clusterjs ./app --workers 5 --reloadon SIGUSR2
 If you want to actually shutdown the app, simply issue a `SIGTERM` or
 a `SIGQUIT` (ie. `kill 29571`).
 
-### As a module library
+## As a module
 
 You can also use cluster.js as a module in your userland
 code by simply requiring it:
