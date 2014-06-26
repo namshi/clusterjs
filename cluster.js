@@ -1,7 +1,4 @@
-var cluster = require('cluster'),
-    debugModule = require('debug')('cluster.js-module'),
-    debugLauncher = require('debug')('cluster.js-launcher'),
-    debugWorkerRestarter = require('debug')('cluster.js-restarter');
+var cluster = require('cluster');
 
 /**
  * Restarts a list of clustered server.
@@ -11,20 +8,21 @@ var cluster = require('cluster'),
  * @param {Object} cluster
  * @param {Array} workers
  */
-function restartWorkers(cluster, workers) {
+function reloadWorkers(cluster, workers) {
     var workerKey = workers.shift();
+    var newWorker = cluster.fork();
 
-    debugWorkerRestarter('restarting worker: '+workerKey);
+    console.log('restarting worker: '+workerKey);
 
     cluster.workers[workerKey].disconnect();
     cluster.workers[workerKey].on("disconnect", function () {
-        debugWorkerRestarter("Shutdown complete for worker " + workerKey);
+        console.log("Shutdown complete for worker " + workerKey);
     });
-    var newWorker = cluster.fork();
-    newWorker.on("online", function () {
-        debugWorkerRestarter("Replacement worker online.");
+
+    newWorker.on("listening", function () {
+        console.log("Replacement worker online.");
         if (workers.length > 0) {
-            restartWorkers(cluster, workers);
+            reloadWorkers(cluster, workers);
         }
     });
 }
@@ -54,7 +52,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
 
         // Listen for dying workers
         cluster.on('exit', function (worker) {
-            debugLauncher('Worker ' + worker.id + ' died :(');
+            console.log('Worker ' + worker.id + ' died :(');
             // A suicide means we shutdown the worker on purpose
             // like in a deployment
             if (worker.suicide !== true) {
@@ -63,7 +61,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         });
 
         process.on(reloadSignal, function () {
-            debugLauncher(reloadSignal + 'received, this means we are deploying and want to reload the app');
+            console.log(reloadSignal + 'received, this means we are deploying and want to reload the app');
 
             // delete the cached module, so we can reload the app
             delete require.cache[require.resolve(appPath)];
@@ -71,14 +69,11 @@ function launch (appPath, noOfWorkers, reloadSignal) {
             // only reload one worker at a time
             // otherwise, we'll have a time when no request handlers are running
             var workers = Object.keys(cluster.workers);
-            restartWorkers(cluster, workers);
+            reloadWorkers(cluster, workers);
         });
     } else {
-        try {
-            var app = require(appPath);
-        } catch(error){}
-
-        debugLauncher('Worker ' + cluster.worker.id + ' running!');
+        var app = require(appPath);
+        console.log('Worker ' + cluster.worker.id + ' running!');
     }
 }
 
@@ -89,7 +84,6 @@ function launch (appPath, noOfWorkers, reloadSignal) {
  * @param {Number} noOfWorkers
  * @param {String} reloadSignal
  */
-module.exports = function(app, noOfWorkers, reloadSignal){
-    debugModule('Thank you for using Cluster.js!');
+module.exports = function(app, noOfWorkers, reloadSignal) {
     launch(app, noOfWorkers, reloadSignal);
 };

@@ -1,6 +1,10 @@
 # ClusterJS
-An handy tool for your 0 downtime needs.
-Cluster.js will take your app and spawn it in a node-cluster with how many workers
+An handy tool for your node servers and 0 downtime needs.
+
+Cluster.js will take your app and spawn it in a node-cluster with how many workers you want.
+
+You can reload the cluster sending a signal: clusterjs will go through all your workers, reloading one of them and waiting until it's listen on the wire before restarting another untill the whole cluster is done.
+
 
 ## Installation
 ```
@@ -9,9 +13,7 @@ git clone git://github.com/namshi/clusterjs.git
 
 ## Usage
 
-### As a module
-Make sure your application exports its self a a module and include cluster.js in you entry point script:
-
+### As a module library
 ```javascript
     var clusterjs = require('clusterjs');
     
@@ -29,34 +31,20 @@ export PATH='$PATH:./node_modules/clusterjs/bin/'
 and enjoy your command :)
 ```
 cluster.js ./app --workers 5 --reloadon SIGUSR2
-
 ```
 * help:
 ```
 cluster.js --help
 ```
-* restarting
+* restarting: 
 Send your cluster's pid  your chosen signal.
 Ex:
 ```
 kill -SIGUSR2 <cluster's pid>
 ```
-* output
-By default cluster.js will not give output.
-You can ask for output by prepanding the `DEBUG=` var when  you run it:
 
-```
-DEBUG=* cluster.js ./app --workers 5 --reloadon SIGUSR2
-```
-
-there are 5 kind of outputs you can obtain:
-* `DEBUG=cluster.js-bin`: will give infos about the command launched
-* `DEBUG=cluster.js-module`: will output how the module was invoked
-* `DEBUG=cluster.js-launcher`: will give information about the process been lanuched
-* `DEBUG=cluster.js-restarter`: will output when the worker are restarterd (upon signal)
-* `DEBUG=*`: will print all the debugs together
-
-## Tests
+## Quick test:
+You can use the simple dummy server included in the `tests/testApp` directory if you need to experiment.
 
 ## Thanks to
 

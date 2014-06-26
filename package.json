@@ -4,7 +4,6 @@
   "description": "Clusterify your NodeJS applications and deploy without downtimes. Just like that.",
   "main": "cluster.js.js",
   "scripts": {
-    "test": "mocha --recursive -t 10000 -R spec",
     "start": "bin/cluster.js"
   },
   "repository": {
@@ -29,11 +28,7 @@
     "url": "https://github.com/namshi/clusterjs/issues"
   },
   "homepage": "https://github.com/namshi/clusterjs",
-  "devDependencies": {
-    "mocha": "^1.20.1"
-  },
   "dependencies": {
-    "debug": "^1.0.2",
     "yargs": "^1.2.6"
   }
 }
