@@ -48,6 +48,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         // Create a worker for each CPU
         for (var i = 0; i < noOfWorkers; i += 1) {
             cluster.fork();
+            console.log('forking');
         }
 
         // Listen for dying workers
