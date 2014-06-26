@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Clusterify your NodeJS applications and deploy without downtimes. Just like that.",
   "main": "cluster.js.js",
-  "scripts": {
-    "start": "bin/cluster.js"
+  "bin": {
+    "clusterjs": "bin/cluster.js"
   },
   "repository": {
     "type": "git",
