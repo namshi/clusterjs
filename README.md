@@ -8,6 +8,17 @@ You can reload the cluster sending a signal: clusterjs will go through all your 
 reloading one of them and waiting until it's listen on the wire before restarting another
 until the whole cluster is done.
 
+```
+~/projects/clusterjs (master ✔) ᐅ clusterjs
+Cluster.js help:
+
+Usage: clusterjs [path to app] [options]
+
+Options:
+ --workers	 Defines how many workers we should launch (Default: CPU count)
+ --reloadon	 On Which signal will the cluster be reloaded (Default: SIGUSR2)
+```
+
 
 ## Installation
 
