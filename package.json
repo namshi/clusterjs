@@ -23,7 +23,7 @@
     "downtime",
     "deployment"
   ],
-  "author": "odino <alessandro.nadalin@gmail.com>",
+  "author": "odino <alessandro.nadalin@gmail.com>, unLucio <unlucio@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/namshi/clusterjs/issues"

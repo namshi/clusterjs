@@ -1,7 +1,7 @@
 var cluster = require('cluster'),
     debugModule = require('debug')('cluster.js-module'),
     debugLauncher = require('debug')('cluster.js-launcher'),
-    debugWorkerRestarter = require('debug')('cluster.js-workersRestarter');
+    debugWorkerRestarter = require('debug')('cluster.js-restarter');
 
 /**
  * Restarts a list of clustered server.
