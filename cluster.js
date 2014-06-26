@@ -1,6 +1,11 @@
 var cluster = require('cluster');
 
-
+/**
+ * Stops a worker, waits for it to disconnect and gives controll back
+ *
+ * @param workerKey
+ * @param callback
+ */
 function stopWorker(workerKey, callback){
     cluster.workers[workerKey].disconnect();
     cluster.workers[workerKey].on("disconnect", function () {
