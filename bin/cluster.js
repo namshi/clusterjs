@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 var Cluster = require('../cluster.js'),
-    argv = require('yargs').argv,
-    debug = require('debug')('command');
+    argv = require('yargs').argv;
 
 var help = 'Cluster.js Command Help: \n\n' +
            'Usage: clusterjs [path to app] [options] \n\n' +
@@ -14,7 +13,7 @@ var workers = argv.workers  || require('os').cpus().length;
 var reloadSignal = argv.reloadon || 'SIGUSR2';
 var appName = argv['_'][0] || process.env.APP || null;
 
-debug('Cluster starting:: Appname->'+appName+'. Launching '+workers+' workers. Cluster will reload on: '+reloadSignal);
+console.log('Cluster starting:: app: '+appName+', launching ' + workers + ' workers. The cluster will reload on: ' + reloadSignal);
 
 if (appName === null || argv.help) {
     console.log(help);
