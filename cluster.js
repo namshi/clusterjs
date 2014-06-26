@@ -18,8 +18,9 @@ function stopWorker(workerKey, callback){
  */
 function reloadWorkers(workers) {
     var workerKey = workers.shift();
+    var newWorker = cluster.fork();
 
-    console.log('restarting worker: '+workerKey);
+    console.log('restarting worker: ' + workerKey);
 
     stopWorker(workerKey, function () {
         var newWorker = cluster.fork();
@@ -33,22 +34,6 @@ function reloadWorkers(workers) {
 }
 
 /**
- *Stops each worker and waits before moving to the next one
- *
- * @param workers
- */
-function shutdownWorkers(workers){
-    var workerKey = workers.shift();
-
-    console.log('stopping worker: '+workerKey);
-    stopWorker(workerKey, function () {
-        if (workers.length > 0) {
-            shutdownWorkers(workers);
-        }
-    });
-}
-
-/**
  * Takes care of launching our cluster
  * master process and it's children
  *
@@ -57,9 +42,9 @@ function shutdownWorkers(workers){
  * @param {String} reloadSignal
  */
 function launch (appPath, noOfWorkers, reloadSignal) {
-    appPath = appPath || process.env.APP || null;
-    noOfWorkers = noOfWorkers || require('os').cpus().length;
-    reloadSignal = reloadSignal || "SIGUSR2";
+    appPath         = appPath || process.env.APP || null;
+    noOfWorkers     = noOfWorkers || require('os').cpus().length;
+    reloadSignal    = reloadSignal || "SIGUSR2";
 
     if (appPath === null) {
         throw new Error('Please provide a path to your app. You can either pass it as a parameter or as process.env.APP');
@@ -69,12 +54,12 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         // Create a worker for each CPU
         for (var i = 0; i < noOfWorkers; i += 1) {
             cluster.fork();
-            console.log('forking');
         }
 
         // Listen for dying workers
         cluster.on('exit', function (worker) {
             console.log('Worker ' + worker.id + ' died :(');
+
             // A suicide means we shutdown the worker on purpose
             // like in a deployment
             if (worker.suicide !== true) {
