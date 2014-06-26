@@ -55,6 +55,8 @@ function shutdownWorkers(workers) {
     stopWorker(workerKey, function () {
         if (workers.length > 0) {
             shutdownWorkers(workers);
+        } else {
+            process.exit();
         }
     });
 }
