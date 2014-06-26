@@ -1,7 +1,8 @@
 var cluster = require('cluster');
 
 /**
- * Stops a worker, waits for it to disconnect and gives controll back
+ * Stops a worker, waits for it to disconnect
+ * and gives control back.
  *
  * @param workerKey
  * @param callback
