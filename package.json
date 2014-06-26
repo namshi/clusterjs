@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "debug": "^1.0.2",
-    "newrelic": "^1.7.3",
     "yargs": "^1.2.6"
   }
 }
