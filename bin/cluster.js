@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var Cluster = require('../cluster.js'),
+var cluster = require('../cluster.js'),
     argv = require('yargs').argv;
 
 var help = 'Cluster.js help: \n\n' +
@@ -22,4 +22,4 @@ if (appName === null || argv.help) {
     console.log('The cluster will reload on: ' + reloadSignal);
 }
 
-Cluster(appName, workers, reloadSignal);
+cluster(appName, workers, reloadSignal);
