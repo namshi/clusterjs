@@ -1,28 +1,49 @@
 var cluster = require('cluster');
 
+
+function stopWorker(workerKey, callback){
+    cluster.workers[workerKey].disconnect();
+    cluster.workers[workerKey].on("disconnect", function () {
+        console.log("Shutdown complete for worker " + workerKey);
+        callback();
+    });
+}
+
 /**
  * Restarts a list of clustered server.
  * waits for each worker server to come up
  * so we have 0 downtime.
  *
- * @param {Object} cluster
  * @param {Array} workers
  */
-function reloadWorkers(cluster, workers) {
+function reloadWorkers(workers) {
     var workerKey = workers.shift();
-    var newWorker = cluster.fork();
 
     console.log('restarting worker: '+workerKey);
 
-    cluster.workers[workerKey].disconnect();
-    cluster.workers[workerKey].on("disconnect", function () {
-        console.log("Shutdown complete for worker " + workerKey);
+    stopWorker(workerKey, function () {
+        var newWorker = cluster.fork();
+        newWorker.on("listening", function () {
+            console.log("Replacement worker online.");
+            if (workers.length > 0) {
+                reloadWorkers( workers);
+            }
+        });
     });
+}
 
-    newWorker.on("listening", function () {
-        console.log("Replacement worker online.");
+/**
+ *Stops each worker and waits before moving to the next one
+ *
+ * @param workers
+ */
+function shutdownWorkers(workers){
+    var workerKey = workers.shift();
+
+    console.log('stopping worker: '+workerKey);
+    stopWorker(workerKey, function () {
         if (workers.length > 0) {
-            reloadWorkers(cluster, workers);
+            shutdownWorkers(workers);
         }
     });
 }
@@ -70,12 +91,21 @@ function launch (appPath, noOfWorkers, reloadSignal) {
             // only reload one worker at a time
             // otherwise, we'll have a time when no request handlers are running
             var workers = Object.keys(cluster.workers);
-            reloadWorkers(cluster, workers);
+            reloadWorkers(workers);
         });
     } else {
         var app = require(appPath);
         console.log('Worker ' + cluster.worker.id + ' running!');
     }
+}
+
+/**
+ * lists the workers and inits the graceful shutdown procedure
+ */
+function gracefulShutdown(){
+    console.log('shutting down gracefully');
+    var workers = Object.keys(cluster.workers);
+    shutdownWorkers(workers);
 }
 
 /**
@@ -87,4 +117,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
  */
 module.exports = function(app, noOfWorkers, reloadSignal) {
     launch(app, noOfWorkers, reloadSignal);
+    
+    process.on('SIGTERM', gracefulShutdown);
+    process.on('SIGQUIT', gracefulShutdown);
 };
