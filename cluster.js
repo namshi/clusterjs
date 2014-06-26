@@ -3,9 +3,15 @@ var cluster = require('cluster'),
     debugLauncher = require('debug')('cluster.js-launcher'),
     debugWorkerRestarter = require('debug')('cluster.js-workersRestarter');
 
-
+/**
+ * Restarts a list of clustered server.
+ * waits for each worker server to come up
+ * so we have 0 downtime.
+ *
+ * @param {Object} cluster
+ * @param {Array} workers
+ */
 function restartWorkers(cluster, workers) {
-    ;
     var workerKey = workers.shift();
 
     debugWorkerRestarter('restarting worker: '+workerKey);
@@ -23,9 +29,15 @@ function restartWorkers(cluster, workers) {
     });
 }
 
-
+/**
+ * Takes care of launching our cluster
+ * master process and it's children
+ *
+ * @param {String} appPath
+ * @param {Number} noOfWorkers
+ * @param {String} reloadSignal
+ */
 function launch (appPath, noOfWorkers, reloadSignal) {
-
     appPath = appPath || process.env.APP || null;
     noOfWorkers = noOfWorkers || require('os').cpus().length;
     reloadSignal = reloadSignal || "SIGUSR2";
@@ -35,7 +47,6 @@ function launch (appPath, noOfWorkers, reloadSignal) {
     }
 
     if (cluster.isMaster) {
-
         // Create a worker for each CPU
         for (var i = 0; i < noOfWorkers; i += 1) {
             cluster.fork();
@@ -70,8 +81,15 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         debugLauncher('Worker ' + cluster.worker.id + ' running!');
     }
 }
-module.exports = function(app, noOfWorkers, reloadSignal){
 
+/**
+ * This is how the world sees us
+ *
+ * @param {String} app
+ * @param {Number} noOfWorkers
+ * @param {String} reloadSignal
+ */
+module.exports = function(app, noOfWorkers, reloadSignal){
     debugModule('Thank you for using Cluster.js!');
     launch(app, noOfWorkers, reloadSignal);
 };

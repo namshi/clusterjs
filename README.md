@@ -1,10 +1,35 @@
 # ClusterJS
+An handy tool for your 0 downtime needs.
+Cluster.js will take your app and spawn it in a node-cluster with how many workers
 
-What
-
-## Installationn
+## Installation
+```
+git clone git://github.com/namshi/clusterjs.git
+```
 
 ## Usage
+
+### As a module
+make sure your application exports its self a a module and include cluster.js in you entry point script:
+
+```javascript
+    var clusterjs = require('clusterjs');
+    
+    cluster('./app.js', 5, 'SIGUSR2');
+```
+
+### On your command line
+
+```
+export PATH='$PATH:./node_modules/clusterjs/bin/'
+
+cluster.js ./app --workers 5 --reloadon SIGUSR2
+
+```
+* help:
+```
+cluster.js --help
+```
 
 ## Tests
 
