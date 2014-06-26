@@ -1,4 +1,5 @@
 var cluster = require('cluster');
+var path    = require('path');
 
 /**
  * Stops a worker, waits for it to disconnect
@@ -70,13 +71,13 @@ function shutdownWorkers(workers) {
  * @param {String} reloadSignal
  */
 function launch (appPath, noOfWorkers, reloadSignal) {
-    appPath         = appPath || process.env.APP || null;
-    noOfWorkers     = noOfWorkers || require('os').cpus().length;
-    reloadSignal    = reloadSignal || "SIGUSR2";
-
     if (appPath === null) {
         throw new Error('Please provide a path to your app. You can either pass it as a parameter or as process.env.APP');
     }
+
+    appPath         = path.join(process.cwd(), appPath || process.env.APP);
+    noOfWorkers     = noOfWorkers || require('os').cpus().length;
+    reloadSignal    = reloadSignal || "SIGUSR2";
 
     if (cluster.isMaster) {
         // Create a worker for each CPU
@@ -100,6 +101,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
 
             // delete the cached module, so we can reload the app
             delete require.cache[require.resolve(appPath)];
+            console.log('The app has been reloaded');
 
             // only reload one worker at a time
             // otherwise, we'll have a time when no request handlers are running

@@ -32,7 +32,7 @@ Suppose you have an app running on a `index.js` file, you
 can simply decide to start it with clusterjs:
 
 ```
-clusterjs ./app
+clusterjs app.js
 ```
 
 This will start a cluster of as many apps as CPU cores you
@@ -40,7 +40,7 @@ have on your machine; to change the number of workers, simply
 specify it when launching the cluster:
 
 ```
-clusterjs ./app --workers 5
+clusterjs app.js --workers 5
 ```
 
 You can reload the cluster, achieving **zero-downtime deployments** by
@@ -64,7 +64,7 @@ without any downtime.
 You can also customize the signal used to reload the cluster:
 
 ```
-clusterjs ./app --workers 5 --reloadon SIGUSR2
+clusterjs app.js --workers 5 --reloadon SIGUSR2
 ```
 
 If you want to actually shutdown the app, simply issue a `SIGTERM` or
@@ -78,7 +78,7 @@ code by simply requiring it:
 ``` javascript
 var clusterjs = require('clusterjs');
 
-cluster('./app.js', 5, 'SIGUSR2');
+cluster('app.js', 5, 'SIGUSR2');
 ```
 
 ## Have a closer look
