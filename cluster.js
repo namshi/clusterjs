@@ -26,7 +26,6 @@ function stopWorker(workerKey, callback){
 function reloadWorkers(workers) {
     console.log('*** reloading workers!');
     var workerKey = workers.shift();
-    var newWorker = cluster.fork();
 
     console.log('restarting worker: ' + workerKey);
 
@@ -49,9 +48,8 @@ function reloadWorkers(workers) {
  */
 function shutdownWorkers(workers) {
     var workerKey = workers.shift();
-    var newWorker = cluster.fork();
 
-    console.log('restarting worker: ' + workerKey);
+    console.log('shutting down worker: ' + workerKey);
 
     stopWorker(workerKey, function () {
         if (workers.length > 0) {
@@ -87,11 +85,10 @@ function launch (appPath, noOfWorkers, reloadSignal) {
 
         // Listen for dying workers
         cluster.on('exit', function (worker) {
-            console.log('Worker ' + worker.id + ' died :(');
-
             // A suicide means we shutdown the worker on purpose
             // like in a deployment
             if (worker.suicide !== true) {
+                console.log('Worker ' + worker.id + ' died :( ...booting a replacement worker');
                 cluster.fork();
             }
         });
