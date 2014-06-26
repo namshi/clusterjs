@@ -58,6 +58,9 @@ You can also customize the signal used to reload the cluster:
 clusterjs ./app --workers 5 --reloadon SIGUSR2
 ```
 
+If you want to actually shutdown the app, simply issue a `SIGTERM` or
+a `SIGQUIT` (ie. `kill 29571`).
+
 ### As a module library
 
 You can also use cluster.js as a module in your userland
