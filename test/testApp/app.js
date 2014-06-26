@@ -1,4 +1,4 @@
-console.log('--- test app loaded as pid: '+process.pid);
+console.log('--- test app loaded as pid: ' + process.pid);
 
 var http = require('http');
 http.createServer(function (req, res) {
