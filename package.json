@@ -1,0 +1,31 @@
+{
+  "name": "clusterjs",
+  "version": "0.0.1",
+  "description": "Clusterify your NodeJS applications and deploy without downtimes. Just like that.",
+  "main": "cluster.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/namshi/clusterjs.git"
+  },
+  "keywords": [
+    "cluster",
+    "node",
+    "zdd",
+    "downtime",
+    "zero",
+    "downtime",
+    "deployment",
+    "zero",
+    "downtime",
+    "deployment"
+  ],
+  "author": "odino <alessandro.nadalin@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/namshi/clusterjs/issues"
+  },
+  "homepage": "https://github.com/namshi/clusterjs"
+}
