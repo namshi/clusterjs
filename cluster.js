@@ -96,7 +96,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         });
 
         process.on(reloadSignal, function () {
-            console.log(reloadSignal + 'received, this means we are deploying and want to reload the app');
+            console.log(reloadSignal + ' received, reloading the app');
 
             // delete the cached module, so we can reload the app
             delete require.cache[require.resolve(appPath)];
