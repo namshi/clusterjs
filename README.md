@@ -39,12 +39,12 @@ issuing a `SIGUSR` command to the master process:
 
 ```
 ~/projects/clusterjs (master ✔) ᐅ ps aux | grep cluster.js
-odino    29571  2.0  0.1 659236 10440 pts/4    Sl+  23:21   0:00 node ./bin/cluster.js test/testApp/app.js
-odino    29573  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
-odino    29574  2.0  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
-odino    29576  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
-odino    29577  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
-odino    29582  0.0  0.0  13636   984 pts/5    S+   23:21   0:00 grep cluster.js
+29571  2.0  0.1 659236 10440 pts/4    Sl+  23:21   0:00 node ./bin/cluster.js test/testApp/app.js
+29573  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
+29574  2.0  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
+29576  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
+29577  1.5  0.1 656160  8564 pts/4    Sl+  23:21   0:00 /home/local/bin/node /home/projects/clusterjs/bin/cluster.js test/testApp/app.js
+29582  0.0  0.0  13636   984 pts/5    S+   23:21   0:00 grep cluster.js
 
 ~/projects/clusterjs (first-release ✔) ᐅ kill -SIGUSR2 29571
 ```
