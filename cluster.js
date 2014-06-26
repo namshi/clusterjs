@@ -108,6 +108,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         });
     } else {
         var app = require(appPath);
+
         console.log('Worker ' + cluster.worker.id + ' running!');
     }
 }
