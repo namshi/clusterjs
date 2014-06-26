@@ -12,7 +12,7 @@ function reloadWorkers(cluster, workers) {
     var workerKey = workers.shift();
     var newWorker = cluster.fork();
 
-    console.log('restarting worker: '+workerKey);
+    console.log('restarting worker: ' + workerKey);
 
     cluster.workers[workerKey].disconnect();
     cluster.workers[workerKey].on("disconnect", function () {
@@ -21,6 +21,7 @@ function reloadWorkers(cluster, workers) {
 
     newWorker.on("listening", function () {
         console.log("Replacement worker online.");
+
         if (workers.length > 0) {
             reloadWorkers(cluster, workers);
         }
@@ -36,9 +37,9 @@ function reloadWorkers(cluster, workers) {
  * @param {String} reloadSignal
  */
 function launch (appPath, noOfWorkers, reloadSignal) {
-    appPath = appPath || process.env.APP || null;
-    noOfWorkers = noOfWorkers || require('os').cpus().length;
-    reloadSignal = reloadSignal || "SIGUSR2";
+    appPath         = appPath || process.env.APP || null;
+    noOfWorkers     = noOfWorkers || require('os').cpus().length;
+    reloadSignal    = reloadSignal || "SIGUSR2";
 
     if (appPath === null) {
         throw new Error('Please provide a path to your app. You can either pass it as a parameter or as process.env.APP');
@@ -53,6 +54,7 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         // Listen for dying workers
         cluster.on('exit', function (worker) {
             console.log('Worker ' + worker.id + ' died :(');
+
             // A suicide means we shutdown the worker on purpose
             // like in a deployment
             if (worker.suicide !== true) {
