@@ -2,7 +2,7 @@
   "name": "clusterjs",
   "version": "0.6.0",
   "description": "Clusterify your NodeJS applications and deploy without downtimes. Just like that.",
-  "main": "cluster.js.js",
+  "main": "cluster.js",
   "bin": {
     "clusterjs": "bin/cluster.js"
   },
