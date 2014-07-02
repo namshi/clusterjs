@@ -1,5 +1,6 @@
 var cluster = require('cluster');
 var path    = require('path');
+var fs      = require('fs');
 
 /**
  * Stops a worker, waits for it to disconnect
@@ -60,6 +61,24 @@ function shutdownWorkers(workers) {
     });
 }
 
+
+/**
+ * Figures out the correct path for the app.
+ *
+ * @param appPath
+ * @returns {*}
+ */
+function findAppScript(appPath) {
+    var prefix = (appPath.indexOf('/') !== 0) ? process.cwd() : '';
+    appPath = path.join(prefix, appPath);
+
+    if (fs.existsSync(appPath)) {
+        return appPath;
+    } else {
+        throw new Error('Cannot find required app');
+    }
+}
+
 /**
  * Takes care of launching our cluster
  * master process and it's children
@@ -73,9 +92,11 @@ function launch (appPath, noOfWorkers, reloadSignal) {
         throw new Error('Please provide a path to your app. You can either pass it as a parameter or as process.env.APP');
     }
 
-    appPath         = path.join(process.cwd(), appPath || process.env.APP);
+    appPath         = findAppScript(appPath || process.env.APP);
     noOfWorkers     = noOfWorkers || require('os').cpus().length;
     reloadSignal    = reloadSignal || "SIGUSR2";
+
+    console.log('appPath', appPath);
 
     if (cluster.isMaster) {
         // Create a worker for each CPU
@@ -124,12 +145,12 @@ function gracefulShutdown(){
 /**
  * This is how the world sees us
  *
- * @param {String} app
+ * @param {String} appPath
  * @param {Number} noOfWorkers
  * @param {String} reloadSignal
  */
-module.exports = function(app, noOfWorkers, reloadSignal) {
-    launch(app, noOfWorkers, reloadSignal);
+module.exports = function(appPath, noOfWorkers, reloadSignal) {
+    launch(appPath, noOfWorkers, reloadSignal);
     
     process.on('SIGTERM', gracefulShutdown);
     process.on('SIGQUIT', gracefulShutdown);
