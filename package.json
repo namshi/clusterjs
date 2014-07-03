@@ -1,6 +1,6 @@
 {
   "name": "clusterjs",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Clusterify your NodeJS applications and deploy without downtimes. Just like that.",
   "main": "cluster.js",
   "bin": {
