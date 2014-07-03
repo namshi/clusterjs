@@ -43,6 +43,12 @@ specify it when launching the cluster:
 clusterjs app.js --workers 5
 ```
 
+**WARNING** if your path contains a symlink, clusterjs will need the full path to your app
+
+```
+clusterjs /path/to/your/app.js
+```
+
 You can reload the cluster, achieving **zero-downtime deployments** by
 issuing a `SIGUSR2` command to the master process:
 
