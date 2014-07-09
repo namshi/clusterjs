@@ -118,7 +118,8 @@ function launch (appPath, noOfWorkers, reloadSignal) {
             console.log(reloadSignal + ' received, reloading the app');
 
             // delete the cached module, so we can reload the app
-            delete require.cache[require.resolve(appPath)];
+            //delete require.cache[require.resolve(appPath)];
+            require.cache = {};
             console.log('The app has been reloaded');
 
             // only reload one worker at a time
