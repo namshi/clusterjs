@@ -28,7 +28,7 @@ npm install -g clusterjs
 
 ## Usage
 
-Suppose you have an app running on a `index.js` file, you
+Suppose you have an app running on an `app.js` file, you
 can simply decide to start it with clusterjs:
 
 ```
