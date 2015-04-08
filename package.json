@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/namshi/clusterjs",
   "dependencies": {
+    "lodash": "^3.6.0",
     "yargs": "^1.2.6"
   }
 }

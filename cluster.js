@@ -1,6 +1,8 @@
 var cluster = require('cluster');
 var path    = require('path');
 var fs      = require('fs');
+var _       = require('lodash');
+var deaths  = [];
 
 /**
  * Stops a worker, waits for it to disconnect
@@ -80,6 +82,46 @@ function findAppScript(appPath) {
 }
 
 /**
+ * Calculates the delay we should wait for
+ * when booting a replacement worker.
+ * Sometimes your scripts cannot really start
+ * (DB is down, etc) and clusterjs ends
+ * up consuming a lot of CPU trying to
+ * restart them forever.
+ * 
+ * If your workers die too fast, we will
+ * wait 250ms for each of them that died
+ * in the past 10s.
+ * To optimize calculations, we delete deaths
+ * that happened more than 10s ago.
+ * 
+ * If only 1 worker has died in the past 10s,
+ * we skip the delay as it might be a
+ * genuine / regular death.
+ */
+function calculateDelay() {
+  var interval = 250;
+  var now = (new Date()).getTime();
+  var delay = _.sum(_.map(deaths, function(death, index){
+    if (now - death < 10000) {
+      return interval;
+    }
+    
+    deaths.splice(index, 1);
+    return false;
+  }));
+  
+  if (delay === interval) {
+    delay = 0;
+  }
+  
+  console.log('Going to wait ' + delay / 1000  + ' seconds before booting a new worker as we died ' + deaths.length + ' times in the past seconds');
+  deaths.push(now)
+  
+  return delay;
+}
+
+/**
  * Takes care of launching our cluster
  * master process and it's children
  *
@@ -109,8 +151,10 @@ function launch (appPath, noOfWorkers, reloadSignal) {
             // A suicide means we shutdown the worker on purpose
             // like in a deployment
             if (worker.suicide !== true) {
-                console.log('Worker ' + worker.id + ' died :( ...booting a replacement worker');
-                cluster.fork();
+                setTimeout(function(){
+                  console.log('Worker ' + worker.id + ' died :( ...booting a replacement worker');
+                  cluster.fork();
+                }, calculateDelay());
             }
         });
 
