@@ -108,7 +108,7 @@ function calculateDelay() {
     }
     
     deaths.splice(index, 1);
-    return false;
+    return 0;
   }));
   
   if (delay === interval) {
